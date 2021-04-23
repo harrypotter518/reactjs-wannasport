@@ -2,7 +2,7 @@ module.exports = [
 
   {
     key: 'partner',
-    name: 'Partner',
+    name: '  Partner',
     icon: 'business',
     title: true
   },
@@ -21,7 +21,7 @@ module.exports = [
   },
   {
     key: 'facility',
-    name: 'Facility',
+    name: '  Facility',
     icon: 'business',
     title: true,
   },

@@ -160,11 +160,10 @@ function MainMenu(props) {
               name: 'age',
               id: 'age-simple',
             }}
-            style={{ width:"100px" }}
+            style={{ width:"10rem", height:"2rem" }}
           >          
-            <MenuItem value={1}>Facility1</MenuItem>
-            <MenuItem value={2}>Facility2</MenuItem>
-            <MenuItem value={3}>Facility3</MenuItem>
+            <MenuItem value={1}>Fredericia Tennisklub</MenuItem>
+            <MenuItem value={2}>Hermes Hallen</MenuItem>
           </Select>
        
           </ListItem>
