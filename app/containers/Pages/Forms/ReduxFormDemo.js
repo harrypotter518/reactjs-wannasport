@@ -134,33 +134,15 @@ function ReduxFormDemo(props) {
   const [completeState, setCompleteState] = useState({
     open: false,
   });
-
-  // const [progressState , setProgressState ] = useState({
-  //   completed: 0,
-  //   buffer: 10,
-  //   isActive: false
-  // });
-
   const [selectedDate, setSelectedDate] = useState(new Date());
-  
-  // console.log("sadassssssssssssssssssssssssssssssss");
-  // const rr =  useScript('https://static.wannasport.dk/misc/client.js');
-  // console.log(rr);
-
+ 
   useEffect(() => {
     const init = async () => {
       // const res = await axios.get('https://static.wannasport.dk/misc/client.js');
       const category = await getCategories();
-
       let tempState = { ...dataState };
       tempState.sportcategory = category;
-      setDataState(tempState);
-
-      let timer = null;
-      // if (progressState.isActive == true)
-      //   timer = setInterval(progress, 500);
-      // else
-      //   clearInterval(timer);        
+      setDataState(tempState);   
     }
     init();
   }, []);
@@ -173,61 +155,34 @@ function ReduxFormDemo(props) {
     setSelectedDate(date);
   };
 
-
-  // const openModal = () =>{
-  //   setModalState({...modalState, open:true})
-  // }
-
-
   const handleOpen = async() => {
-
-   
-    setModalState({ ...modalState, open: true });
-    //setProgressState({ ...progressState, isActive: true });
-  
-     await  createActivity("football match",4,'04/04/2020', '21:00',34,'good is good is goos is good','3fc33045-21e6-494d-bc96-967ae26741b5');
-   // await getCategories();
-
-
-   setCompleteState({ ...completeState, open: true });
-   setModalState({ ...modalState, open: false });
-
+    setModalState({ ...modalState, open: true });  
+    const formData= {
+      title: 'activity title',
+      sport: 1,
+      date: '2020-04-20',
+      time: '18:00',
+      duration: 60,
+      description: 'this is an activity description',
+      facilityId: '6807bae8-c51e-4343-bfef-31791a9f5488'
+      };
+    await  createActivity(formData);
+    setCompleteState({ ...completeState, open: true });
+    setModalState({ ...modalState, open: false });
   }
   const handleClose = () => {
     setModalState({ ...modalState, open: false })
   }
   const completeClose = async() => {
-    let facilityId = "3fc33045-21e6-494d-bc96-967ae26741b5";
-    let sorting = 'name';
-    let desc = '1';
     setCompleteState({ ...completeState, open: false });
-    const rl = await getActivities(facilityId, sorting, desc);
-    console.log("d---------------------------------d");
-    console.log(rl);
   }
   const overviewClick = () => {
-    // <Route path="/app/:facilityId/list-activities" component={Table} />
-     setCompleteState({ ...completeState, open: false })
-     window.location.href = '/app/:facilityId/list-activities';
+    setCompleteState({ ...completeState, open: false })
+    window.location.href = '/app/:facilityId/list-activities';
   }
-
-  //let  complete =0;
-  // const progress = () => {
- 
-  //   complete  = progressState.completed;
-  //   console.log(complete);
-  //   if (complete > 100) {
-  //     setProgressState({ ...progressState, completed: 100, buffer: 10 });
-  //   } else {
-  //     const diff = Math.random() * 10;
-  //     const diff2 = Math.random() * 10;
-  //     setProgressState({ ...progressState, completed: complete + diff, buffer: complete + diff + diff2 });
-  //   }
-  // };
 
   return (
     <div>
-      {/* <Grid container spacing={3} alignItems="flex-start" direction="row" justify="center"> */}
       <Grid container spacing={3} alignItems="flex-start" direction="row" justify="center">
         <Grid item xs={12} md={6}>
           <Paper className={classes.root}>
@@ -376,84 +331,76 @@ function ReduxFormDemo(props) {
               </Button>
             </Grid>
 
-            <div>
-              <Dialog
-                open={modalState.open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
-                <DialogContent
-                  style={{
-                    height: "200px", width: "400px"
-                  }}
-                >                  
-                  <Grid
-                    item
-                    xs={10}
-                    md={12}
-                    className={classes.demo}    
-                    style={{ paddingTop:"3rem" }}              
-                  >
-                    <FormLabel component="label" style={{ textAlign: "center"}}><h4 >Operating Activity</h4></FormLabel>
-                      {/* <LinearProgress variant="buffer" value={progressState.completed} valueBuffer={progressState.buffer} />
+              <div>
+                <Dialog
+                  open={modalState.open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
+                  <DialogContent
+                    style={{
+                      height: "200px", width: "400px"
+                    }}
+                  >                  
+                    <Grid
+                      item
+                      xs={10}
+                      md={12}
+                      className={classes.demo}    
+                      style={{ paddingTop:"3rem" }}              
+                    >
+                      <FormLabel component="label" style={{ textAlign: "center"}}><h4 >Operating Activity</h4></FormLabel>
+                      <LinearProgress />
                       <br />
-                      <LinearProgress color="secondary" variant="buffer" value={progressState.completed} valueBuffer={progressState.buffer} /> */}
-                    <LinearProgress />
-                    <br />
-                    <LinearProgress color="secondary" />
-                  </Grid>
+                      <LinearProgress color="secondary" />
+                    </Grid>
 
-                </DialogContent>
-                <DialogActions>
-                  {/* <Button onClick={handleClick} variant="contained" color="primary" autoFocus>
-                      Save
-                    </Button> */}
-                  <Button onClick={handleClose} color="primary">
-                    Cancel
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                      Cancel
                     </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
+                  </DialogActions>
+                </Dialog>
+              </div>
 
+              <div>
+                <Dialog
+                  open={completeState.open}
+                  // onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
+                  <DialogContent
+                    style={{
+                      height: "200px", width: "400px"
+                    }}
+                  >                  
+                    <Grid
+                      item
+                      xs={10}
+                      md={12}
+                      className={classes.demo}    
+                      style={{ paddingTop:"3rem" }}              
+                    >
+                      <FormLabel component="label" style={{ textAlign: "center"}}><h4 > Activity Created</h4></FormLabel>
+                      <div style={{ textAlign: "center"}}><Icon >done</Icon></div>
+                    </Grid>
 
-            <div>
-              <Dialog
-                open={completeState.open}
-                // onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
-                <DialogContent
-                  style={{
-                    height: "200px", width: "400px"
-                  }}
-                >                  
-                  <Grid
-                    item
-                    xs={10}
-                    md={12}
-                    className={classes.demo}    
-                    style={{ paddingTop:"3rem" }}              
-                  >
-                    <FormLabel component="label" style={{ textAlign: "center"}}><h4 > Activity Created</h4></FormLabel>
-                    <div style={{ textAlign: "center"}}><Icon >done</Icon></div>
-                  </Grid>
-
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={overviewClick}  color="primary" autoFocus>
-                      Go to List
-                    </Button>
-                  <Button onClick={completeClose} variant="contained" color="primary">
-                    Close
-                    </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={overviewClick}  color="primary" autoFocus>
+                        Go to List
+                      </Button>
+                    <Button onClick={completeClose} variant="contained" color="primary">
+                      Close
+                      </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>   
 
             </Grid>
           </Paper>
