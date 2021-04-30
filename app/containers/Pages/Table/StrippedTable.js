@@ -28,6 +28,7 @@ import {
   SwitchRedux
 } from 'enl-components/Forms/ReduxFormMUI';
 import {cancelActivity, getActivities} from '../client.js';
+import { CompareArrowsOutlined } from '@material-ui/icons';
 
 const styles = theme => ({
   table: {
@@ -84,7 +85,7 @@ function AdvFilter(props) {
        
 
           return (
-          <FormControl className={classes.formControl}>
+          <FormControl className={classes.formControl}  style={{marginTop:"-1.5rem" }}>
             <InputLabel htmlFor="age-simple">More Options</InputLabel>
               <Select
                 // value={1}
@@ -92,7 +93,7 @@ function AdvFilter(props) {
                 inputProps={{
                   name: 'Id'
                 }}
-                style={{ width:"10rem", height:"3rem" }}
+                style={{ width:"10rem", height:"2.5rem" }}
               >    
                 <MenuItem value=""> <em>None</em></MenuItem>
                 <MenuItem value="1">Cancel Activity</MenuItem>
@@ -105,6 +106,23 @@ function AdvFilter(props) {
    
   ];
 
+  useEffect(() => {
+    const init = async () => {
+      const url = window.location.href;
+      const suburl = url.split("app/")[1];
+      const facility_id = suburl.split("/")[0];
+      console.log(facility_id);
+      const data_list = await getActivities(facility_id,'name');
+      console.log(data_list);
+      //debugger;
+      for (var i =0; i<data_list.length;i++)
+        console.log("i===="+data_list[i]);
+
+     
+    }
+    init();
+  }, []);
+
   const data = [
     ['Football intro', '19/05/2020 19:00~21:00','Deltagere 3/30'],
     ['Badminton intro', '19/04/2021 19:00~21:00', 'Deltagere 3/30'],
@@ -114,6 +132,7 @@ function AdvFilter(props) {
     ['Volleyball Train', '13/05/2020 13:00~15:00', 'Deltagere 3/30']
   ];
 
+  
   const options = {
     filterType: 'dropdown',
     responsive: 'stacked',
@@ -177,7 +196,7 @@ function AdvFilter(props) {
     // const message =  'this is a message to all participants';
     // await  cancelActivity(act_id, message);
   
-    const facilityId = '3fc33045-21e6-494d-bc96-967ae26741b5'; 
+    const facilityId = '6807bae8-c51e-4343-bfef-31791a9f5488'; 
     const sorting = "date";
     const re = await getActivities(facilityId, sorting);
     console.log(re);

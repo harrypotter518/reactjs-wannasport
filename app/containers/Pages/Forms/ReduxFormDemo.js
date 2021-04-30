@@ -22,6 +22,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Input from '@material-ui/core/Input';
 import axios from 'axios';
 
 import { DatePicker, TimePicker, KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -125,8 +126,7 @@ function ReduxFormDemo(props) {
   } = props;
 
   const [dataState, setDataState] = useState({
-    sportcategory: [],
-    currentSportId: 0
+    sportcategory: []
   });
   const [modalState, setModalState] = useState({
     open: false,
@@ -135,7 +135,25 @@ function ReduxFormDemo(props) {
     open: false,
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
- 
+  const [inputdataState, setInputdataState] = useState({
+    title: '',
+    sport: 0,
+    date: "03/04/2020",
+    time: '18:00',
+    duration: '',
+    description: '',
+    facilityId: ''
+  });
+  const formData= {
+    title: inputdataState.title,
+    sport: inputdataState.sport,
+    date: inputdataState.date,
+    time: inputdataState.time,
+    duration: inputdataState.duration,
+    description: inputdataState.description,
+    facilityId: inputdataState.facilityId,
+    };
+
   useEffect(() => {
     const init = async () => {
       // const res = await axios.get('https://static.wannasport.dk/misc/client.js');
@@ -143,30 +161,34 @@ function ReduxFormDemo(props) {
       let tempState = { ...dataState };
       tempState.sportcategory = category;
       setDataState(tempState);   
+
+      const url = window.location.href;
+      const suburl = url.split("app/")[1];
+      const facility_id = suburl.split("/")[0];
+      console.log(facility_id);
+      setInputdataState({ ...inputdataState, facilityId: facility_id });
     }
     init();
   }, []);
 
-  const handleChange = (e) => {
-    setDataState({ ...dataState, currentSportId: e.target.value });
+  const handleChangeSport = (e) => {
+    setInputdataState({ ...inputdataState, sport: e.target.value });
   }
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    setInputdataState({...inputdataState, date:date._d});
+    //setInputdataState({...inputdataState, time:date._d});
+
+  };
+  const handleTimeChange = (time) => {
+    var real_time="";
+     real_time = time._d;
   };
 
   const handleOpen = async() => {
     setModalState({ ...modalState, open: true });  
-    const formData= {
-      title: 'activity title',
-      sport: 1,
-      date: '2020-04-20',
-      time: '18:00',
-      duration: 60,
-      description: 'this is an activity description',
-      facilityId: '6807bae8-c51e-4343-bfef-31791a9f5488'
-      };
-    await  createActivity(formData);
+    //await  createActivity(formData);
+console.log(formData);
     setCompleteState({ ...completeState, open: true });
     setModalState({ ...modalState, open: false });
   }
@@ -178,7 +200,19 @@ function ReduxFormDemo(props) {
   }
   const overviewClick = () => {
     setCompleteState({ ...completeState, open: false })
-    window.location.href = '/app/:facilityId/list-activities';
+    window.location.href = '/app/' + inputdataState.facilityId + '/list-activities';
+  }
+
+  const onChangeTitle = (e) => {
+    setInputdataState({...inputdataState, title: e.target.value});
+  }
+
+  const onChangeDuration = (e) => {
+    setInputdataState({...inputdataState, duration: e.target.value});
+  }
+
+  const onChangeDescription = (e) => {
+    setInputdataState({...inputdataState, description: e.target.value});
   }
 
   return (
@@ -203,22 +237,27 @@ function ReduxFormDemo(props) {
             <Grid item xs={12} md={12}  style={{ paddingTop:'2rem' }}>
          
               <Typography variant="button" className={classes.divider}>Activity Title</Typography>
-              <Field
-                name="text"
-                component={TextFieldRedux}
-                placeholder="Name of Activity"
-                label="Text Field"
-                validate={required}
-                required
-                className={classes.field}
-              />
+              <Input
+              placeholder="Supplier Name"
+              className={classes.input}
+              inputProps={{
+                'aria-label': 'Description',
+              }}
+              validate={required}
+              required
+               style={{width:'100%' }}
+              value={inputdataState.title} 
+               onChange={onChangeTitle}
+              type = "text"
+           
+            />
             </Grid>
             <Grid item xs={12} md={12}>
               <Typography variant="button" className={classes.divider}>Sport</Typography>
               <FormControl className={classes.field}>
                 <Select
-                  value={dataState.currentSportId}
-                  onChange={handleChange}
+                  value={inputdataState.sport}
+                  onChange={handleChangeSport}
                   inputProps={{
                     name: 'age',
                     id: 'age-simple',
@@ -250,11 +289,11 @@ function ReduxFormDemo(props) {
                       <div className={classes.picker}>
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                           <KeyboardDatePicker
-                            label="Masked input"
+                            label="Date picker"
                             format="DD/MM/YYYY"
-                            placeholder="10/10/2018"
-                            mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
-                            value={selectedDate}
+                            placeholder="10/11/2018"
+                            // mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+                            value={inputdataState.date}
                             onChange={handleDateChange}
                             animateYearScrolling={false}
                           />
@@ -269,10 +308,12 @@ function ReduxFormDemo(props) {
                       <div className={classes.picker}>
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                           <TimePicker
-                            label="Masked timepicker"
-                            mask={[/\d/, /\d/, ':', /\d/, /\d/, ' ', /a|p/i, 'M']}
-                            placeholder="08:00 AM"
-                            value={selectedDate}
+                            label="Timepicker"
+                            // mask={[/\d/, /\d/, ':', /\d/, /\d/, ' ', /a|p/i, 'M']}
+                            ampm={false}
+                            format="HH:MM"
+                            placeholder="13:11"
+                            value={inputdataState.date}
                             onChange={handleDateChange}
                             InputProps={{
                               endAdornment: (
@@ -291,16 +332,19 @@ function ReduxFormDemo(props) {
                 </Grid>
                 <Grid item sm ={12} xs={12} md={4} >
                   <FormControl className={classes.formControl} style={{ width:"100%" }}>
-                      <Field
-                        name="text"
-                        component={TextFieldRedux}
-                        type="number"
-                        placeholder="60 min"
-                        label="Duration"
-                        validate={required}
-                        required
-                        className={classes.field}
-                      />
+                      <Input
+                      placeholder="Duration: 60min"
+                      className={classes.input}
+                      inputProps={{
+                        'aria-label': 'Description',
+                      }}
+                      validate={required}
+                      required
+                      style={{width:'100%', height:'3rem', marginTop:'-0.2rem' }}
+                      value={inputdataState.duration} 
+                      onChange={onChangeDuration}
+                      type = "number"                        
+                    />
                   </FormControl>
                 </Grid>
               </Grid>
@@ -312,20 +356,24 @@ function ReduxFormDemo(props) {
             </div>
             </Grid>
             <Grid item xs={12} md={12} style={{ paddingTop: "2rem" }}>
-            {/* <div className={classes.field} > */}
-              <FormLabel component="label"><h5>Description</h5></FormLabel>
-              <Field
-                name="textarea"
-                className={classes.field}
-                component={TextFieldRedux}
-                placeholder="Type something"
-                label="Description"
-                multiline={trueBool}
-                rows={4}
+              <Input
+              placeholder="Type something"
+              className={classes.input}
+              inputProps={{
+                'aria-label': 'Description',
+              }}
+              validate={required}
+              required
+              style={{ width:'100%' }}
+              value={inputdataState.description} 
+              onChange={onChangeDescription}
+              type = "text"
+              multiline={true}
+              rows={4}    
               />
             </Grid>
 
-            <Grid item xs={12} md={12} style={{ textAlign: 'right' }}>
+            <Grid item xs={12} md={12} style={{ textAlign: 'right', paddingTop:'2rem' }}>
               <Button onClick={handleOpen} variant="contained" color="primary" disabled={submitting} >
                 Continue
               </Button>

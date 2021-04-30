@@ -368,21 +368,21 @@ export async function createActivity({
 
     await awaitRandomTime(1000);
  
-    // if (!facilityId) throw errorWithMessage('FacilityId is mandatory');
-    // if (storage.facilities.filter(x => x.id == facilityId).length == 0)
-    //     throw errorWithMessage('Facility is id not valid');
-    // if (!title) throw errorWithMessage('Title is mandatory');
-    // if (title.length < 5 || title.length > 50) throw errorWithMessage('Title length should be between 5 and 50');
-    // if (!sport) throw errorWithMessage('Sport is mandatory');
-    // if (isNaN(sport)) throw errorWithMessage('Sport should be an integer');
-    // if (!date) throw errorWithMessage('Date is mandatory');
-    // if (!new Date(date).getTime()) throw errorWithMessage('Date is invalid');
-    // if (!time) throw errorWithMessage('Time is mandatory');
-    // if (!time.match(/\d\d:\d\d/)) throw errorWithMessage('Time format is wrong');
-    // if (!duration) throw errorWithMessage('Duration is mandatory');
-    // if (isNaN(duration)) throw errorWithMessage('Duration is mandatory');
-    // if (!description) throw errorWithMessage('Title is mandatory');
-    // if (description.length < 10 || description.length > 200) throw errorWithMessage('Description length should be between 10 and 200');
+    if (!facilityId) throw errorWithMessage('FacilityId is mandatory');
+    if (storage.facilities.filter(x => x.id == facilityId).length == 0)
+        throw errorWithMessage('Facility is id not valid');
+    if (!title) throw errorWithMessage('Title is mandatory');
+    if (title.length < 5 || title.length > 50) throw errorWithMessage('Title length should be between 5 and 50');
+    if (!sport) throw errorWithMessage('Sport is mandatory');
+    if (isNaN(sport)) throw errorWithMessage('Sport should be an integer');
+    if (!date) throw errorWithMessage('Date is mandatory');
+    if (!new Date(date).getTime()) throw errorWithMessage('Date is invalid');
+    if (!time) throw errorWithMessage('Time is mandatory');
+    if (!time.match(/\d\d:\d\d/)) throw errorWithMessage('Time format is wrong');
+    if (!duration) throw errorWithMessage('Duration is mandatory');
+    if (isNaN(duration)) throw errorWithMessage('Duration is mandatory');
+    if (!description) throw errorWithMessage('Title is mandatory');
+    if (description.length < 10 || description.length > 200) throw errorWithMessage('Description length should be between 10 and 200');
 
     const id = uuidv4();
     storage.activities = storage.activities || [];
