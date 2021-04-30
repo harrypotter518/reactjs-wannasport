@@ -187,8 +187,8 @@ function ReduxFormDemo(props) {
 
   const handleOpen = async() => {
     setModalState({ ...modalState, open: true });  
-    //await  createActivity(formData);
-console.log(formData);
+    await  createActivity(formData);
+
     setCompleteState({ ...completeState, open: true });
     setModalState({ ...modalState, open: false });
   }

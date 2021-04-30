@@ -114,23 +114,31 @@ function AdvFilter(props) {
       console.log(facility_id);
       const data_list = await getActivities(facility_id,'name');
       console.log(data_list);
-      //debugger;
+   
+      var k=0;
+      let data=[];
       for (var i =0; i<data_list.length;i++)
-        console.log("i===="+data_list[i]);
+      {        
+        if (typeof data_list[i]['name'] != 'undefined')
+        {
+          data[k] =[];
+          data[k].push(data_list[i]['name']);
+          data[k].push(data_list[i]['date']+" "+ data_list[i]['startTime']+"~"+data_list[i]['endTime']);
+          data[k].push("Deltagere "+data_list[i]['participants']+"/"+ data_list[i]['maxParticipants']);
+          k++;
+        }        
 
-     
+      }
+      setDataState({...dataState, data:data});
     }
     init();
   }, []);
 
-  const data = [
+  const default_data = [
     ['Football intro', '19/05/2020 19:00~21:00','Deltagere 3/30'],
     ['Badminton intro', '19/04/2021 19:00~21:00', 'Deltagere 3/30'],
-    ['Footbal match', '19/02/2020 14:00~16:00', 'Deltagere 3/30'],
-    ['Volleyball Train', '13/05/2020 13:00~15:00', 'Deltagere 3/30'],
-    ['Footbal match', '19/02/2020 14:00~16:00', 'Deltagere 3/30'],
-    ['Volleyball Train', '13/05/2020 13:00~15:00', 'Deltagere 3/30']
   ];
+ 
 
   
   const options = {
@@ -157,6 +165,9 @@ function AdvFilter(props) {
 
   const { classes } = props;
   // const [cancelState, setCancelState] = useState();
+  const [dataState, setDataState] = useState({
+    data: default_data,
+  })
   const [modalState, setModalState] = useState({
     open: false,
   })
@@ -212,7 +223,7 @@ function AdvFilter(props) {
       <div className={classes.table}>
         <MUIDataTable
           title="Activity list"
-          data={data}
+          data={dataState.data}
           columns={columns}
           options={options}
         />
@@ -267,27 +278,9 @@ function AdvFilter(props) {
               multiline={true}
               rows={4}    
             />
-              
-              {/* <Field
-                name="textarea"
-                className={classes.field}
-                component={TextFieldRedux}
-                placeholder="Type something"
-                label="Description"
-                multiline={true}
-                rows={4}
-              /> */}
-              
+       
               <FormLabel component="label"  style={{marginTop:'2rem' }}><h5>Confirm</h5></FormLabel>
-              {/* <Field
-                name="text"
-                component={TextFieldRedux}
-                placeholder="Name of Activity"
-                label="Text Field"
-                validate={required}
-                required
-                className={classes.field}
-              /> */}
+   
               <Input
               placeholder='Write "confirm" to cancel activity'
               // className={classes.input}
