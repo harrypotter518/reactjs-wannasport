@@ -361,7 +361,8 @@ export async function createActivity({
     time,
     duration,
     description,
-    facilityId
+    facilityId,
+    canCancel
 })
 {
     const storage = getStorage();
@@ -394,7 +395,8 @@ export async function createActivity({
         time,
         duration,
         description,
-        facilityId
+        facilityId,
+        canCancel
     });
     
     persistStorage(storage);

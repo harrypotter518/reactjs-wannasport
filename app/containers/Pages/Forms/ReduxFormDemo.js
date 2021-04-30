@@ -39,7 +39,7 @@ import frLocale from 'date-fns/locale/fr';
 import ruLocale from 'date-fns/locale/ru';
 import enLocale from 'date-fns/locale/en-US';
 
-import {getCategories, createActivity, getActivities} from './client.js';
+import {getCategories, createActivity, getActivities} from '../client.js';
 const localeMap = {
   en: enLocale,
   fr: frLocale,
@@ -128,6 +128,7 @@ function ReduxFormDemo(props) {
     clear
   } = props;
 
+  const [errorState, setErrorState] = useState("");
   const [dataState, setDataState] = useState({
     sportcategory: []
   });
@@ -145,7 +146,8 @@ function ReduxFormDemo(props) {
     time: '18:00',
     duration: '',
     description: '',
-    facilityId: ''
+    facilityId: '',
+    canCancel : 'true'
   });
   const formData= {
     title: inputdataState.title,
@@ -155,11 +157,13 @@ function ReduxFormDemo(props) {
     duration: inputdataState.duration,
     description: inputdataState.description,
     facilityId: inputdataState.facilityId,
+    canCancel: inputdataState.canCancel
     };
 
   useEffect(() => {
     const init = async () => {
       // const res = await axios.get('https://static.wannasport.dk/misc/client.js');
+      // localStorage. removeItem('ws_provideradmin');
       const category = await getCategories();
       let tempState = { ...dataState };
       tempState.sportcategory = category;
@@ -168,7 +172,6 @@ function ReduxFormDemo(props) {
       const url = window.location.href;
       const suburl = url.split("app/")[1];
       const facility_id = suburl.split("/")[0];
-      console.log(facility_id);
       setInputdataState({ ...inputdataState, facilityId: facility_id });
     }
     init();
@@ -176,6 +179,7 @@ function ReduxFormDemo(props) {
 
   const handleChangeSport = (e) => {
     setInputdataState({ ...inputdataState, sport: e.target.value });
+    setErrorState("");
   }
 
   const handleDateChange = (date, value) => {
@@ -191,11 +195,19 @@ function ReduxFormDemo(props) {
 
   const handleOpen = async() => {
     setModalState({ ...modalState, open: true });  
-    console.log(formData);
-    //await  createActivity(formData);
-
-    setCompleteState({ ...completeState, open: true });
-    setModalState({ ...modalState, open: false });
+    //console.log(formData);
+    const result= await  createActivity(formData);
+    if (result == "success")
+    {
+      setErrorState("");
+      setCompleteState({ ...completeState, open: true });
+      setModalState({ ...modalState, open: false });
+    }
+    else
+    {
+      setErrorState(result);
+      setModalState({ ...modalState, open: false });
+    }
   }
   const handleClose = () => {
     setModalState({ ...modalState, open: false })
@@ -210,14 +222,17 @@ function ReduxFormDemo(props) {
 
   const onChangeTitle = (e) => {
     setInputdataState({...inputdataState, title: e.target.value});
+    setErrorState("");
   }
 
   const onChangeDuration = (e) => {
     setInputdataState({...inputdataState, duration: e.target.value});
+    setErrorState("");
   }
 
   const onChangeDescription = (e) => {
     setInputdataState({...inputdataState, description: e.target.value});
+    setErrorState("");
   }
 
   return (
@@ -239,23 +254,27 @@ function ReduxFormDemo(props) {
                 You are able to create activities on WannaSport, that will be exposed and people can sign up for
               </Typography>
             </Grid>
+            <Grid item xs={12} md={12} style={{ paddingTop:"1rem" }}>
+                <FormLabel component="label" style={{ textAlign: "center", color:'red'}}><h4 >{errorState}</h4></FormLabel>
+            </Grid>
             <Grid item xs={12} md={12}  style={{ paddingTop:'2rem' }}>
          
               <Typography variant="button" className={classes.divider}>Activity Title</Typography>
               <Input
               placeholder="Supplier Name"
               className={classes.input}
-              inputProps={{
-                'aria-label': 'title',
-              }}
+              // inputProps={{
+              //   'aria-label': 'title',
+              // }}
               validate={required}
               required
-               style={{width:'100%' }}
+              style={{width:'100%' }}
               value={inputdataState.title} 
-               onChange={onChangeTitle}
+              onChange={onChangeTitle}
               type = "text"
            
-            />
+              />
+        
             </Grid>
             <Grid item xs={12} md={12} style={{ paddingTop: "1rem" }}>
               <Typography variant="button" className={classes.divider}>Sport</Typography>
@@ -270,7 +289,7 @@ function ReduxFormDemo(props) {
                 >
                   {dataState.sportcategory.map((sp, index) => {
                     return (
-                      <MenuItem key={sp.Id} value={sp.Id}>{sp.Name}</MenuItem>
+                      <MenuItem key={index} value={sp.Id}>{sp.Name}</MenuItem>
                     )
                   })
                   }
@@ -340,9 +359,9 @@ function ReduxFormDemo(props) {
                       <Input
                       placeholder="Duration: 60min"
                       className={classes.input}
-                      inputProps={{
-                        'aria-label': 'Duration',
-                      }}
+                      // inputProps={{
+                      //   'aria-label': 'Duration',
+                      // }}
                       validate={required}
                       required
                       style={{width:'100%', height:'3rem', marginTop:'-0.2rem' }}
@@ -365,9 +384,9 @@ function ReduxFormDemo(props) {
               <Input
               placeholder="Type something"
               className={classes.input}
-              inputProps={{
-                'aria-label': 'Description',
-              }}
+              // inputProps={{
+              //   'aria-label': 'Description',
+              // }}
               validate={required}
               required
               style={{ width:'100%' }}
@@ -454,7 +473,8 @@ function ReduxFormDemo(props) {
                       </Button>
                   </DialogActions>
                 </Dialog>
-              </div>   
+              </div>  
+           
 
             </Grid>
           </Paper>

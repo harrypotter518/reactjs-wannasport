@@ -64,7 +64,7 @@ function MainMenu(props) {
   const handleSelect = (value) => { 
     selectDispatch(selectAction(value))
   }
-  
+
   useEffect(() => {
     const init = async () => {
    
@@ -228,7 +228,7 @@ function MainMenu(props) {
             <MenuItem value="6807bae8-c51e-4343-bfef-31791a9f5488">Hermes Hallen</MenuItem>
             {facilitydataState.data.map((fd, index) => {
               return (
-                <MenuItem key={fd.id} value={fd.Id}>{fd.name}</MenuItem>
+                <MenuItem key={index} value={fd.Id}>{fd.name}</MenuItem>
               )
             })}
           </Select>

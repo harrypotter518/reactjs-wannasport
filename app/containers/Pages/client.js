@@ -361,45 +361,148 @@ export async function createActivity({
     time,
     duration,
     description,
-    facilityId
+    facilityId,
+    canCancel
 })
 {
     const storage = getStorage();
-
     await awaitRandomTime(1000);
 
-    if (!facilityId) throw errorWithMessage('FacilityId is mandatory');
-    if (storage.facilities.filter(x => x.id == facilityId).length == 0)
-        throw errorWithMessage('Facility is id not valid');
-    if (!title) throw errorWithMessage('Title is mandatory');
-    if (title.length < 5 || title.length > 50) throw errorWithMessage('Title length should be between 5 and 50');
-    if (!sport) throw errorWithMessage('Sport is mandatory');
-    if (isNaN(sport)) throw errorWithMessage('Sport should be an integer');
-    if (!date) throw errorWithMessage('Date is mandatory');
-    if (!new Date(date).getTime()) throw errorWithMessage('Date is invalid');
-    if (!time) throw errorWithMessage('Time is mandatory');
-    if (!time.match(/\d\d:\d\d/)) throw errorWithMessage('Time format is wrong');
-    if (!duration) throw errorWithMessage('Duration is mandatory');
-    if (isNaN(duration)) throw errorWithMessage('Duration is mandatory');
-    if (!description) throw errorWithMessage('Title is mandatory');
-    if (description.length < 10 || description.length > 200) throw errorWithMessage('Description length should be between 10 and 200');
+    // if (!facilityId) throw errorWithMessage('FacilityId is mandatory');
+    // if (storage.facilities.filter(x => x.id == facilityId).length == 0)
+    //     throw errorWithMessage('Facility is id not valid');
+    // if (!title) throw errorWithMessage('Title is mandatory');
+    // if (title.length < 5 || title.length > 50) throw errorWithMessage('Title length should be between 5 and 50');
+    // if (!sport) throw errorWithMessage('Sport is mandatory');
+    // if (isNaN(sport)) throw errorWithMessage('Sport should be an integer');
+    // if (!date) throw errorWithMessage('Date is mandatory');
+    // if (!new Date(date).getTime()) throw errorWithMessage('Date is invalid');
+    // if (!time) throw errorWithMessage('Time is mandatory');
+    // if (!time.match(/\d\d:\d\d/)) throw errorWithMessage('Time format is wrong');
+    // if (!duration) throw errorWithMessage('Duration is mandatory');
+    // if (isNaN(duration)) throw errorWithMessage('Duration is mandatory');
+    // if (!description) throw errorWithMessage('Title is mandatory');
+    // if (description.length < 10 || description.length > 200) throw errorWithMessage('Description length should be between 10 and 200');
 
-    const id = uuidv4();
-    storage.activities = storage.activities || [];
-    storage.activities.push({
-        id,
-        title,
-        sport,
-        date,
-        time,
-        duration,
-        description,
-        facilityId
-    });
-    
-    persistStorage(storage);
+    let facilityId_valid = false;
+    let title_valid = false;
+    let sport_valid = false;
+    let date_valid = false;
+    let time_valid = false;
+    let duration_valid = false;
+    let description_valid = false;
+    let message ="";
+    if (!facilityId) 
+    {
+      message ='Facility id is mandatory';
+       return message;
+    } 
+    else if (storage.facilities.filter(x => x.id == facilityId).length == 0)
+    {
+      message ='Facility id is mandatory';
+       return message;
+    } 
+    else
+      facilityId_valid ==true;
 
-    return id;
+
+  if (!title) 
+  {
+    message = 'Title is mandatory';
+    return message;
+  }
+  else if (title.length < 5 || title.length > 50)
+  {
+    message = 'Title length should be between 5 and 50';
+    return message;
+  } 
+  else
+    title_valid =true;
+
+  if (!sport)
+  {
+    message = 'Sport is mandatory';
+    return message;
+  }
+  else if(isNaN(sport)) 
+  {
+    message = 'Sport should be an integer';
+    return message;
+  }
+  else
+    sport_valid =true;
+
+  if (!date) 
+  {
+    message = 'Date is mandatory';
+    return message;
+  }
+  else if (!new Date(date).getTime()) 
+  {
+    message = 'Date is invalid';
+    return message;
+  }
+  else
+    date_valid =true;
+
+  if (!time)
+  {
+    message = 'Time is mandatory';
+    return message;
+  }
+  else if (!time.match(/\d\d:\d\d/)) 
+  {
+    message = 'Time format is wrong';
+    return message;
+  }
+  else
+    time_valid =true;
+
+  if (!duration) 
+  {
+    message = 'Duration is mandatory';
+    return message;
+  }
+  else if (isNaN(duration))
+  {
+    message = 'Duration is mandatory';
+    return message;
+  }
+  else
+    duration_valid =true;
+
+  if (!description) 
+  {
+    message = 'Description is mandatory';
+    return message;
+  }
+  else if (description.length < 10 || description.length > 200) 
+  {
+    message = 'Description length should be between 10 and 200';
+    return message;
+  }
+  else
+    description_valid =true;
+
+  
+  const id = uuidv4();
+  storage.activities = storage.activities || [];
+  storage.activities.push({
+      id,
+      title,
+      sport,
+      date,
+      time,
+      duration,
+      description,
+      facilityId,
+      canCancel
+  });
+  
+  persistStorage(storage);
+
+  let result= "success";
+  return result;
 }
 
 

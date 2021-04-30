@@ -57,9 +57,15 @@ const styles = theme => ({
 function AdvFilter(props) {
   const columns = [
     {
+      name: 'activity_id',
+      options: {
+        display: false,
+      }
+    },
+    {
       name: 'Activity Title',
       options: {
-        filter: true
+        filter: true,
       }
     },
     {
@@ -82,20 +88,18 @@ function AdvFilter(props) {
       options: {
         filter: true,
         customBodyRender: (value) => {
-       
-
           return (
           <FormControl className={classes.formControl}  style={{marginTop:"-1.5rem" }}>
             <InputLabel htmlFor="age-simple">More Options</InputLabel>
               <Select
-                // value={1}
+                value={value}
                 onChange={cancelOpen}
                 inputProps={{
                   name: 'Id'
                 }}
                 style={{ width:"10rem", height:"2.5rem" }}
               >    
-                <MenuItem value=""> <em>None</em></MenuItem>
+                <MenuItem value="0"> <em>None</em></MenuItem>
                 <MenuItem value="1">Cancel Activity</MenuItem>
               </Select>
             </FormControl>
@@ -111,10 +115,7 @@ function AdvFilter(props) {
       const url = window.location.href;
       const suburl = url.split("app/")[1];
       const facility_id = suburl.split("/")[0];
-      console.log(facility_id);
       const data_list = await getActivities(facility_id,'name');
-      console.log(data_list);
-   
       var k=0;
       let data=[];
       for (var i =0; i<data_list.length;i++)
@@ -122,6 +123,7 @@ function AdvFilter(props) {
         if (typeof data_list[i]['name'] != 'undefined' || typeof data_list[i]['title'] != 'undefined')
         {
           data[k] =[];
+          data[k].push(data_list[i]['id']);
           if (typeof data_list[i]['name'] != 'undefined')
               data[k].push(data_list[i]['name']);
           else if (typeof data_list[i]['title'] != 'undefined')
@@ -132,10 +134,14 @@ function AdvFilter(props) {
               data[k].push(data_list[i]['date']+" "+ data_list[i]['time']+"("+data_list[i]['duration']+"min)");
           if(typeof data_list[i]['participants'] != 'undefined')
               data[k].push("Deltagere "+data_list[i]['participants']+"/"+ data_list[i]['maxParticipants']);
-          else
+          else if(typeof data_list[i]['participants'] == 'undefined')
               data[k].push("Deltagere 0/20");
+          // if(data_list[i]['canCancel'] == true)
+          //     data[k].push(0);
+          if(data_list[i]['canCancel'] == false)
+              data[k].push(1);
           k++;
-        }        
+        }       
 
       }
       setDataState({...dataState, data:data});
@@ -144,7 +150,6 @@ function AdvFilter(props) {
   }, []);
 
   const default_data = [];
- 
 
   
   const options = {
@@ -161,8 +166,7 @@ function AdvFilter(props) {
       });
       setRowdataState({
         ...rowdataState, data:rowData
-      });
-      
+      });      
       console.log(rowData, rowState);
     },
   };
@@ -188,10 +192,11 @@ function AdvFilter(props) {
     rowIndex:0, dataIndex:0
   })
   const [rowdataState, setRowdataState]= useState({
-    ...rowdataState, data:[]
+    ...rowdataState, data:[], message:''
   });
-  const cancelOpen = () => {
-    setModalState({ ...modalState, open: true })
+  const cancelOpen = (e) => {
+    if (e.target.value == 1) 
+     setModalState({ ...modalState, open: true });
   }
   const cancelClose = () => {
     setModalState({ ...modalState, open: false })
@@ -200,23 +205,11 @@ function AdvFilter(props) {
   const cancelClick = async() => {
     setProgressState({...progressState, open:true});
     setModalState({ ...modalState, open: false });  
-    // const formData= {
-    //   title: 'activity title',
-    //   sport: 1,
-    //   date: '2020-04-20',
-    //   time: '18:00',
-    //   duration: 60,
-    //   description: 'this is an activity description',
-    //   facilityId: '6807bae8-c51e-4343-bfef-31791a9f5488'
-    //   };
-    // const act_id = 'ef995215-5377-4e38-842a-0e2933bc54fb';
-    // const message =  'this is a message to all participants';
-    // await  cancelActivity(act_id, message);
-  
-    const facilityId = '6807bae8-c51e-4343-bfef-31791a9f5488'; 
-    const sorting = "date";
-    const re = await getActivities(facilityId, sorting);
-    console.log(re);
+    var sdata = rowdataState.data;
+    const act_id = sdata[0];
+    const message =  rowdataState.message;
+    await  cancelActivity(act_id, message);
+
     setCompleteState({ ...completeState, open: true });
     setProgressState({...progressState, open:false});
   };
@@ -224,6 +217,11 @@ function AdvFilter(props) {
   const completeClose = async() => {
     setCompleteState({ ...completeState, open: false });
   }
+
+  const onChangeDescription = (e) => {
+    setRowdataState({...rowdataState, message: e.target.value});
+  }
+
   return (
     <div>
       <div className={classes.table}>
@@ -255,49 +253,52 @@ function AdvFilter(props) {
               md={12}
               className={classes.demo}              
             >       
-              <Typography variant="h4" component="h3">
-                Football Match
-              </Typography>
-              <Typography component="p">
-                2021/04/30 19:00~20:00
-              </Typography>
-              <hr/>
-              
-              <FormLabel component="label"><h4 >Number Of Participants:8</h4></FormLabel>
-              <br/>
-              
-              <Typography variant="h5" component="h5">
-                Message til Participants
-              </Typography>
-        
-              <FormLabel component="label" style={{ paddingTop:'1rem' }}><h5>Messages will be sent to all participants who signed up for activity</h5></FormLabel>
-              <Input
-              placeholder="Type something"
-              // className={classes.input}
-              // inputProps={{
-              //   'aria-label': 'Description',
-              // }}
-              style={{ width:'100%' }}
-              // value={state.name} 
-              // onChange={onChangeName}
-              type = "text"
-              multiline={true}
-              rows={4}    
-            />
-       
-              <FormLabel component="label"  style={{marginTop:'2rem' }}><h5>Confirm</h5></FormLabel>
-   
-              <Input
-              placeholder='Write "confirm" to cancel activity'
-              // className={classes.input}
-              // inputProps={{
-              //   'aria-label': 'Description',
-              // }}
-              style={{ width:'100%' }}
-              // value={state.name} 
-              // onChange={onChangeName}
-              type = "text" 
-            />
+                <Typography variant="h4" component="h3">
+                  {rowdataState.data[1]}
+                </Typography>
+                <Typography component="p">
+                  {rowdataState.data[2]}
+                </Typography>
+                <hr/>
+                
+                <FormLabel component="label"><h4 >Number Of Participants:0</h4></FormLabel>
+                <br/>
+                
+                <Typography variant="h5" component="h5">
+                  Message til Participants
+                </Typography>
+
+                <div style={{marginTop:'1rem' }}>
+                  <FormLabel component="label" ><h5>Messages will be sent to all participants who signed up for activity</h5></FormLabel>
+                  <Input
+                  placeholder="Type something"
+                  // className={classes.input}
+                  // inputProps={{
+                  //   'aria-label': 'Description',
+                  // }}
+                  style={{ width:'100%' }}
+                  value={rowdataState.message} 
+                  onChange={onChangeDescription}
+                  type = "text"
+                  multiline={true}
+                  rows={4}    
+                />
+              </div>
+
+              <div style={{marginTop:'1rem' }}>
+                <FormLabel component="label"  ><h5>Confirm</h5></FormLabel>   
+                <Input
+                placeholder='Write "confirm" to cancel activity'
+                // className={classes.input}
+                // inputProps={{
+                //   'aria-label': 'Description',
+                // }}
+                style={{ width:'100%' }}
+                // value={state.name} 
+                //  onChange={onChangeConfirm}
+                type = "text" 
+                />
+              </div>
             </Grid>
           </DialogContent>
           <DialogActions>
