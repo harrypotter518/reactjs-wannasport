@@ -11,6 +11,7 @@ import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import authReducer from './modules/authReducer';
 import uiReducer from './modules/uiReducer';
 import initval from './modules/initFormReducer';
+import selectReducer from './modules/selectReducer';
 
 /**
  * Creates the main reducer with the dynamically injected ones
@@ -20,6 +21,7 @@ export default function createReducer(injectedReducers = {}) {
     form,
     ui: uiReducer,
     initval,
+    selectReducer,
     authReducer,
     language: languageProviderReducer,
     router: connectRouter(history),

@@ -27,20 +27,20 @@ class ReduxForm extends React.Component {
     const title = brand.name + ' - Form';
     const description = brand.desc;
     return (
-      <div>
-        <Helmet>
+      <div >
+        {/* <Helmet>
           <title>{title}</title>
           <meta name="description" content={description} />
           <meta property="og:title" content={title} />
           <meta property="og:description" content={description} />
           <meta property="twitter:title" content={title} />
           <meta property="twitter:description" content={description} />
-        </Helmet>
-        <PapperBlock title="Create Activity" icon="library_books" desc=" You are able to create activities on WannaSport, that will be exposed and people can sign up for ">
+        </Helmet> */}
+        {/* <PapperBlock title="Create Activity" icon="library_books" desc=" You are able to create activities on WannaSport, that will be exposed and people can sign up for " > */}
           <div>
             <ReduxFormDemo onSubmit={(values) => this.showResult(values)} />
           </div>
-        </PapperBlock>
+        {/* </PapperBlock> */}
       </div>
     );
   }

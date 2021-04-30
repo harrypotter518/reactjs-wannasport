@@ -42,24 +42,38 @@ module.exports = [
     name: 'Facility Infos',
     linkParent: '/app'
   },
+  // {
+  //   key: 'forms',
+  //   name: 'Create Activity',
+  //   linkParent: '/app/form',
+  //   icon: 'account_circle',
+  // },
   {
     key: 'forms',
     name: 'Create Activity',
-    linkParent: '/app/form',
-    icon: 'account_circle',
+    // linkParent: '/app/1/form',
+    //linkFacility: (facilityId) => `/app/${facilityId}/form`,
+    linkFacility: '/app/{facilityId}/create-activity',
+    icon: 'playlist_add',
   },
   {
     key: 'tables',
     name: 'Activities',
     icon: 'dashboard',
-    linkParent: '/app/table'
+    linkFacility: '/app/{facilityId}/list-activities'
   },
   {
-    key: 'booking',
-    icon: 'local_atm',
+    key: 'booking',  
     name: 'Bookings',
+    icon: 'event_note',
     linkParent: '/app'
   },    
+  {
+    key: 'setting',
+    icon: 'settings',
+    name: 'Setting',
+    linkParent: '#'
+  },
   
 
 ];

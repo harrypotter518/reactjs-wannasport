@@ -10,23 +10,19 @@ function BasicTable() {
   return (
     <div>
       <Helmet>
-        <title>{title}</title>
+        {/* <title>{title}</title> */}
         <meta name="description" content={description} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
       </Helmet>
-      <PapperBlock title="Table" whiteBg icon="table_chart" desc="UI Table when no data to be shown">
+      <PapperBlock title="" whiteBg icon="table_chart" desc="You are able to create activities on Wannasport, that will be exposed and people can sign up for">
         <div>
           <StrippedTable />
         </div>
       </PapperBlock>
-      <PapperBlock title="Empty Table" whiteBg icon="table_chart" desc="They (allegedly) aid usability in reading tabular data by offering the user a coloured means of separating and differentiating rows from one another">
-        <div>
-          <EmptyData />
-        </div>
-      </PapperBlock>
+   
     </div>
   );
 }

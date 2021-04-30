@@ -24,7 +24,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 
-import selectAction from '../../redux/actions/sideActions'
+import { selectAction } from '../../redux/actions/sideActions'
 
 const LinkBtn = React.forwardRef(function LinkBtn(props, ref) { // eslint-disable-line
   return <NavLink to={props.to} {...props} innerRef={ref} />; // eslint-disable-line
@@ -41,9 +41,11 @@ function MainMenu(props) {
     loadTransition
   } = props;
 
-  const [dataState, setDataState] = useState({
-    age: '',
-    name: 'hai'
+  const [facilityState, setFacilityState] = useState({
+    value: '2',
+    name: '',
+    Id: '3fc33045-21e6-494d-bc96-967ae26741b5',
+    facility_url:'',
   });
 
   const selectDispatch = useDispatch();
@@ -53,18 +55,99 @@ function MainMenu(props) {
     loadTransition(false);
   };
 
-  const handleSelect = (event) => { 
-    selectDispatch(selectAction(event.target.value));
+  const handleSelect = (value) => { 
+    selectDispatch(selectAction(value))
   }
+
+  // const handleSelect = (event) => { 
+  //   selectDispatch(selectAction(event.target.value));
+  // }
+  
+  // useEffect(() => {
+  //   const init = async () => {
+  //    // const res = await axios.get('https://static.wannasport.dk/misc/client.js');
+  //    // var strdata = res.data;
+  //    const content = useSelector((state) => state.facilityState);
+
+  //   let tempState = { ...facilityState }
+  //   tempState.Id = "dfsdfs";
+  //   setFacilityState(tempState);  
+
+  //   }
+  //   init();
+  // }, []);
 
 
   const getMenus = menuArray => menuArray.map((item, index) => {
     const handleChange = event => {
-      setDataState({
-        ...dataState,
+      setFacilityState({
+        ...facilityState,
         [event.target.name]: event.target.value
       });
+      handleSelect(event.target.value);
     };
+
+    if (item.child || item.linkFacility) {
+
+      const posts = useSelector((state) => state.facilityState);
+      // const facility_url = item.linkFacility.replace(,facilityState.Id);
+      // setFacilityState({
+      //   ...facilityState,
+      //    Id: event.target.value
+      // });
+
+      let find_ind = item.linkFacility.indexOf("{facilityId}");
+      let subfix =   item.linkFacility.substring(find_ind).replace("{facilityId}", "");
+      console.log("afffffffffffffffffffffffffffffffffffffffffffffffffffff");
+      console.log(subfix);
+     // let = item.linkFacility.split('/');
+   
+      return (
+        <div key={index.toString()}>
+          <ListItem
+            button
+            component={LinkBtn}
+            to={item.linkFacility ? '/app/'+ facilityState.Id + subfix: '#'}
+            className={
+              classNames(
+                classes.head,
+                item.icon ? classes.iconed : '',
+                open.indexOf(item.key) > -1 ? classes.opened : '',
+              )
+            }
+            onClick={() => openSubMenu(item.key, item.keyParent)}
+          >
+            {item.icon && (
+              <ListItemIcon className={classes.icon}>
+                <Icon>{item.icon}</Icon>
+              </ListItemIcon>
+            )}
+            <ListItemText classes={{ primary: classes.primary }} primary={item.name} />
+            {!item.linkFacility && (
+              <span>
+                { open.indexOf(item.key) > -1 ? <ExpandLess /> : <ExpandMore />}
+              </span>
+            )}
+          </ListItem>
+          { !item.linkFacility && (
+            <Collapse
+              component="div"
+              className={classNames(
+                classes.nolist,
+                (item.keyParent ? classes.child : ''),
+              )}
+              in={open.indexOf(item.key) > -1}
+              timeout="auto"
+              unmountOnExit
+            >
+              <List className={classes.dense} component="nav" dense>
+                {getMenus(item.child, 'key')}
+              </List>
+            </Collapse>
+          )}
+        </div>
+      );
+    }
 
     if (item.child || item.linkParent) {
       return (
@@ -154,16 +237,15 @@ function MainMenu(props) {
           </ListItemIcon>
           {/* <InputLabel htmlFor="age-simple">Age</InputLabel> */}
           <Select
-            value={dataState.age}
+            value={facilityState.Id}
             onChange={handleChange}
             inputProps={{
-              name: 'age',
-              id: 'age-simple',
+              name: 'Id'
             }}
             style={{ width:"10rem", height:"2rem" }}
           >          
-            <MenuItem value={1}>Fredericia Tennisklub</MenuItem>
-            <MenuItem value={2}>Hermes Hallen</MenuItem>
+            <MenuItem value="3fc33045-21e6-494d-bc96-967ae26741b5">Fredericia Tennisklub</MenuItem>
+            <MenuItem value="6807bae8-c51e-4343-bfef-31791a9f5488">Hermes Hallen</MenuItem>
           </Select>
        
           </ListItem>
@@ -222,7 +304,7 @@ function MainMenu(props) {
     <div>
       {getMenus(dataMenu)}
     </div>
-  );
+  ); 
 }
 
 MainMenu.propTypes = {
@@ -252,3 +334,4 @@ const MainMenuMapped = connect(
 )(MainMenu);
 
 export default withStyles(styles)(MainMenuMapped);
+

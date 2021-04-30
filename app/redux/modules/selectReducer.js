@@ -1,15 +1,17 @@
 import { Record } from 'immutable';
 import {
   SELECT_ACTION,
-} from '../constants/selectConstants';
+} from '../constants/sideConstants';
 
-export const AuthState = new Record({
-offscreenBufferin
-});
+// export const SelectState = new Record({
+// offscreenBufferin
+// });
 
-export default function authReducer(state = new AuthState(), action = {}) {
+export default function selectReducer(state = {}, action = {}) {
+  // export default function selectReducer(state = new SelectState(), action = {}) {
   switch (action.type) {
-    case SELECT_ACITON:
+    case SELECT_ACTION:
+      console.log('selectReducer');
       return {
         ...state,
         option: action.payload

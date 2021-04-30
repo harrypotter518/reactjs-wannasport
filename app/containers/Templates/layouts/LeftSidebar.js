@@ -62,7 +62,7 @@ function LeftSidebarLayout(props) {
               <Typography component="h4" variant="h4">
                 {messages[place] !== undefined ? <FormattedMessage {...messages[place]} /> : place}
               </Typography>
-              <BreadCrumb separator=" / " theme="light" location={history.location} />
+              {/* <BreadCrumb separator=" / " theme="light" location={history.location} /> */}
             </div>
           )}
           { !pageLoaded && (<img src="/images/spinner.gif" alt="spinner" className={classes.circularProgress} />) }

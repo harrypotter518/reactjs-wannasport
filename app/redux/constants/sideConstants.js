@@ -1,1 +1,3 @@
 export const SIDE_CONSTANTS = 'SIDE_CONSTANTS';
+export const SELECT_ACTION = 'SELECT_ACTION';
+
