@@ -119,12 +119,21 @@ function AdvFilter(props) {
       let data=[];
       for (var i =0; i<data_list.length;i++)
       {        
-        if (typeof data_list[i]['name'] != 'undefined')
+        if (typeof data_list[i]['name'] != 'undefined' || typeof data_list[i]['title'] != 'undefined')
         {
           data[k] =[];
-          data[k].push(data_list[i]['name']);
-          data[k].push(data_list[i]['date']+" "+ data_list[i]['startTime']+"~"+data_list[i]['endTime']);
-          data[k].push("Deltagere "+data_list[i]['participants']+"/"+ data_list[i]['maxParticipants']);
+          if (typeof data_list[i]['name'] != 'undefined')
+              data[k].push(data_list[i]['name']);
+          else if (typeof data_list[i]['title'] != 'undefined')
+              data[k].push(data_list[i]['title']);
+          if (typeof data_list[i]['startTime'] != 'undefined')
+              data[k].push(data_list[i]['date']+" "+ data_list[i]['startTime']+"~"+data_list[i]['endTime']);
+          else if(typeof data_list[i]['duration'] != 'undefined')
+              data[k].push(data_list[i]['date']+" "+ data_list[i]['time']+"("+data_list[i]['duration']+"min)");
+          if(typeof data_list[i]['participants'] != 'undefined')
+              data[k].push("Deltagere "+data_list[i]['participants']+"/"+ data_list[i]['maxParticipants']);
+          else
+              data[k].push("Deltagere 0/20");
           k++;
         }        
 
@@ -134,10 +143,7 @@ function AdvFilter(props) {
     init();
   }, []);
 
-  const default_data = [
-    ['Football intro', '19/05/2020 19:00~21:00','Deltagere 3/30'],
-    ['Badminton intro', '19/04/2021 19:00~21:00', 'Deltagere 3/30'],
-  ];
+  const default_data = [];
  
 
   

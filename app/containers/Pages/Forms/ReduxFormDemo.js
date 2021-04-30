@@ -33,6 +33,8 @@ import DateFnsUtils from '@date-io/date-fns';
 import Menu from '@material-ui/core/Menu';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
+
+import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ruLocale from 'date-fns/locale/ru';
 import enLocale from 'date-fns/locale/en-US';
@@ -43,6 +45,7 @@ const localeMap = {
   fr: frLocale,
   ru: ruLocale,
 };
+
 
 import useScript from '../hooks/useScript';
 
@@ -175,19 +178,21 @@ function ReduxFormDemo(props) {
     setInputdataState({ ...inputdataState, sport: e.target.value });
   }
 
-  const handleDateChange = (date) => {
-    setInputdataState({...inputdataState, date:date._d});
-    //setInputdataState({...inputdataState, time:date._d});
-
+  const handleDateChange = (date, value) => {
+    setSelectedDate(date);
+    setInputdataState({...inputdataState, date:value});
   };
-  const handleTimeChange = (time) => {
-    var real_time="";
-     real_time = time._d;
+  const handleTimeChange = (datetime) => {
+    var time = String(datetime._d);
+    var index = time.indexOf(":");
+    setInputdataState({...inputdataState, time:time.substring(index - 2,index + 3)});
+    setSelectedDate(datetime);
   };
 
   const handleOpen = async() => {
     setModalState({ ...modalState, open: true });  
-    await  createActivity(formData);
+    console.log(formData);
+    //await  createActivity(formData);
 
     setCompleteState({ ...completeState, open: true });
     setModalState({ ...modalState, open: false });
@@ -241,7 +246,7 @@ function ReduxFormDemo(props) {
               placeholder="Supplier Name"
               className={classes.input}
               inputProps={{
-                'aria-label': 'Description',
+                'aria-label': 'title',
               }}
               validate={required}
               required
@@ -252,7 +257,7 @@ function ReduxFormDemo(props) {
            
             />
             </Grid>
-            <Grid item xs={12} md={12}>
+            <Grid item xs={12} md={12} style={{ paddingTop: "1rem" }}>
               <Typography variant="button" className={classes.divider}>Sport</Typography>
               <FormControl className={classes.field}>
                 <Select
@@ -293,7 +298,7 @@ function ReduxFormDemo(props) {
                             format="DD/MM/YYYY"
                             placeholder="10/11/2018"
                             // mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
-                            value={inputdataState.date}
+                            value={selectedDate}
                             onChange={handleDateChange}
                             animateYearScrolling={false}
                           />
@@ -311,10 +316,10 @@ function ReduxFormDemo(props) {
                             label="Timepicker"
                             // mask={[/\d/, /\d/, ':', /\d/, /\d/, ' ', /a|p/i, 'M']}
                             ampm={false}
-                            format="HH:MM"
+                            format="HH:mm"
                             placeholder="13:11"
-                            value={inputdataState.date}
-                            onChange={handleDateChange}
+                            value={selectedDate}
+                            onChange={handleTimeChange}
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="end">
@@ -336,7 +341,7 @@ function ReduxFormDemo(props) {
                       placeholder="Duration: 60min"
                       className={classes.input}
                       inputProps={{
-                        'aria-label': 'Description',
+                        'aria-label': 'Duration',
                       }}
                       validate={required}
                       required
@@ -350,12 +355,13 @@ function ReduxFormDemo(props) {
               </Grid>
             </Grid> 
           
-            <Grid item xs={12} md={12}>
+            {/* <Grid item xs={12} md={12}>
             <div className={classes.inlineWrap}>
               <FormControlLabel control={<Field name="checkbox" component={CheckboxRedux} />} label="Repeat Activity" />
             </div>
-            </Grid>
-            <Grid item xs={12} md={12} style={{ paddingTop: "2rem" }}>
+            </Grid> */}
+            <Grid item xs={12} md={12} >
+              <Typography variant="button" className={classes.divider}>Description</Typography>
               <Input
               placeholder="Type something"
               className={classes.input}
