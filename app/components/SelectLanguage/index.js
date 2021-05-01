@@ -5,7 +5,7 @@ import LocaleToggle from 'containers/LocaleToggle';
 function SelectLanguage() {
   return (
     <div>
-      <LocaleToggle />
+      {/* <LocaleToggle /> */}
     </div>
   );
 }

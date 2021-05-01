@@ -35,16 +35,16 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
 import { format } from 'date-fns';
-import frLocale from 'date-fns/locale/fr';
-import ruLocale from 'date-fns/locale/ru';
-import enLocale from 'date-fns/locale/en-US';
+// import frLocale from 'date-fns/locale/fr';
+// import ruLocale from 'date-fns/locale/ru';
+// import enLocale from 'date-fns/locale/en-US';
 
 import {getCategories, createActivity, getActivities} from '../client.js';
-const localeMap = {
-  en: enLocale,
-  fr: frLocale,
-  ru: ruLocale,
-};
+// const localeMap = {
+//   en: enLocale,
+//   fr: frLocale,
+//   ru: ruLocale,
+// };
 
 
 import useScript from '../hooks/useScript';
@@ -261,7 +261,7 @@ function ReduxFormDemo(props) {
          
               <Typography variant="button" className={classes.divider}>Activity Title</Typography>
               <Input
-              placeholder="Supplier Name"
+              placeholder="Activity Title"
               className={classes.input}
               // inputProps={{
               //   'aria-label': 'title',

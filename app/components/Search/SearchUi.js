@@ -19,14 +19,15 @@ function renderInput(inputProps) {
   const { classes, ref, ...other } = inputProps;
 
   return (
-    <TextField
-      className={classes.inputHeader}
-      fullWidth
-      InputProps={{
-        inputRef: ref,
-        ...other,
-      }}
-    />
+    // <TextField
+    //   className={classes.inputHeader}
+    //   fullWidth
+    //   InputProps={{
+    //     inputRef: ref,
+    //     ...other,
+    //   }}
+    // />
+    <div style={{display:'none'}}></div>
   );
 }
 

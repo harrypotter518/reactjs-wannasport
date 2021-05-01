@@ -131,7 +131,16 @@ function AdvFilter(props) {
           if (typeof data_list[i]['startTime'] != 'undefined')
               data[k].push(data_list[i]['date']+" "+ data_list[i]['startTime']+"~"+data_list[i]['endTime']);
           else if(typeof data_list[i]['duration'] != 'undefined')
-              data[k].push(data_list[i]['date']+" "+ data_list[i]['time']+"("+data_list[i]['duration']+"min)");
+          {
+            let st_time_h =  data_list[i]['time'].split(":")[0];
+            let st_time_m =  data_list[i]['time'].split(":")[1];
+      
+            let end_time_m =  (parseInt(st_time_m) + parseInt(data_list[i]['duration']))%60;
+            let end_time_h =  (parseInt(st_time_h) + Math.trunc((parseInt(st_time_m) + parseInt(data_list[i]['duration']))/60.0) ) %24;
+            if (end_time_h <10) end_time_h = "0" +end_time_h;
+            if (end_time_m <10) end_time_m = "0" +end_time_m;
+            data[k].push(data_list[i]['date']+" "+ data_list[i]['time']+"~"+end_time_h+":"+ end_time_m);
+          }  
           if(typeof data_list[i]['participants'] != 'undefined')
               data[k].push("Deltagere "+data_list[i]['participants']+"/"+ data_list[i]['maxParticipants']);
           else if(typeof data_list[i]['participants'] == 'undefined')
