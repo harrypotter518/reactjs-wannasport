@@ -117,7 +117,6 @@ function AdvFilter(props) {
       const suburl = url.split("app/")[1];
       const facility_id = suburl.split("/")[0];
       const data_list = await getActivities(facility_id,'name');
-      console.log(data_list);
       var k=0;
       let data=[];
       for (var i =0; i<data_list.length;i++)
@@ -155,8 +154,6 @@ function AdvFilter(props) {
           //     data[k].push(0);
           k++;
         }
-        console.log(data);       
-
       }
       setDataState({...dataState, data:data});
     }
@@ -222,14 +219,7 @@ function AdvFilter(props) {
     var sdata = rowdataState.data;
     const act_id = sdata[0];
     const message =  rowdataState.message;
-    console.log(act_id);
-    console.log(message);
     await  cancelActivity(act_id, message);
-    const url = window.location.href;
-    const suburl = url.split("app/")[1];
-    const facility_id = suburl.split("/")[0];
-    const data_a = await getActivities(facility_id,'name');
-    console.log(data_a);
 
     setCompleteState({ ...completeState, open: true });
     setProgressState({...progressState, open:false});

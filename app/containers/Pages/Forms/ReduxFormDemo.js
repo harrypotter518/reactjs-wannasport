@@ -167,8 +167,6 @@ function ReduxFormDemo(props) {
   }
 
   const handleDateChange = (date, value) => {
-    console.log(date);
-    console.log(value);
     setSelectedDate(date);
     setInputdataState({...inputdataState, date:value});
   };
