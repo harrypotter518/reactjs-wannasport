@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
+//import { Helmet } from 'react-helmet';
 import brand from 'enl-api/dummy/brand';
 import { withStyles } from '@material-ui/core/styles';
 import { PapperBlock } from 'enl-components';
@@ -37,6 +37,7 @@ class ReduxForm extends React.Component {
           <meta property="twitter:description" content={description} />
         </Helmet> */}
         {/* <PapperBlock title="Create Activity" icon="library_books" desc=" You are able to create activities on WannaSport, that will be exposed and people can sign up for " > */}
+          
           <div>
             <ReduxFormDemo onSubmit={(values) => this.showResult(values)} />
           </div>

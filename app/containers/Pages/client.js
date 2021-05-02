@@ -315,7 +315,7 @@ const defaultData = {
                 id: 'ef995215-5377-4e38-842a-0e2933bc54fb',
                 facilityId: '6807bae8-c51e-4343-bfef-31791a9f5488',
                 name: 'Voksen Fjer',
-                date: '20/03/2021',
+                date: '2021-03-20',
                 startTime: '18:00',
                 endTime: '19:00',
                 participants: 3,
@@ -323,10 +323,10 @@ const defaultData = {
                 canCancel: true
             },
             {
-                id: 'ef995215-5377-4e38-842a-0e2933bc54fb',
+                id: 'df995215-5377-4e38-842a-0e2933bc54sd',
                 facilityId: '6807bae8-c51e-4343-bfef-31791a9f5488',
                 name: 'Voksen intro',
-                date: '10/03/2021',
+                date: '2021-10-03',
                 startTime: '18:00',
                 endTime: '20:00',
                 participants: 1,
@@ -569,12 +569,17 @@ export async function cancelActivity(activityId, message)
     if (!activityId) {
         throw new Error('Facility id is mandatory');
     }
-
+console.log("cccc-----------------cccccc");
+console.log(activityId);
     await awaitRandomTime(100);
 
     const storage = getStorage();
-    const activity = storage.activities.filter(x => x.activityId = activityId)[0];
-
+    console.log("cccc-----------------cccccc");
+    console.log(storage);
+   // const activity = storage.activities.filter(x => x.activityId = activityId);
+    const activity = storage.activities.filter(x => x.id == activityId)[0];
+    console.log("ccccactivity-----------------cccccc");
+    console.log(activity);
     if (!activity) {
         throw new Error('Activity not found');
     }

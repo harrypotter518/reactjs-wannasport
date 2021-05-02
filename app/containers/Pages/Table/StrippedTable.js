@@ -112,10 +112,12 @@ function AdvFilter(props) {
 
   useEffect(() => {
     const init = async () => {
+      // localStorage. removeItem('ws_provideradmin');
       const url = window.location.href;
       const suburl = url.split("app/")[1];
       const facility_id = suburl.split("/")[0];
       const data_list = await getActivities(facility_id,'name');
+      console.log(data_list);
       var k=0;
       let data=[];
       for (var i =0; i<data_list.length;i++)
@@ -141,16 +143,19 @@ function AdvFilter(props) {
             if (end_time_m <10) end_time_m = "0" +end_time_m;
             data[k].push(data_list[i]['date']+" "+ data_list[i]['time']+"~"+end_time_h+":"+ end_time_m);
           }  
-          if(typeof data_list[i]['participants'] != 'undefined')
+          if(typeof data_list[i]['maxParticipants'] != 'undefined' )
               data[k].push("Deltagere "+data_list[i]['participants']+"/"+ data_list[i]['maxParticipants']);
-          else if(typeof data_list[i]['participants'] == 'undefined')
+          else if(typeof data_list[i]['maxParticipants'] == 'undefined')
               data[k].push("Deltagere 0/20");
           // if(data_list[i]['canCancel'] == true)
           //     data[k].push(0);
           if(data_list[i]['canCancel'] == false)
               data[k].push(1);
+          // else if (data_list[i]['canCancel'] == true)
+          //     data[k].push(0);
           k++;
-        }       
+        }
+        console.log(data);       
 
       }
       setDataState({...dataState, data:data});
@@ -217,7 +222,14 @@ function AdvFilter(props) {
     var sdata = rowdataState.data;
     const act_id = sdata[0];
     const message =  rowdataState.message;
+    console.log(act_id);
+    console.log(message);
     await  cancelActivity(act_id, message);
+    const url = window.location.href;
+    const suburl = url.split("app/")[1];
+    const facility_id = suburl.split("/")[0];
+    const data_a = await getActivities(facility_id,'name');
+    console.log(data_a);
 
     setCompleteState({ ...completeState, open: true });
     setProgressState({...progressState, open:false});
@@ -253,12 +265,14 @@ function AdvFilter(props) {
           {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
           <DialogContent
             style={{
-              height: "40rem", width: "36rem"
+              height: "60vh"
             }}
-          >                  
+          >    
+          
+          <Grid container spacing={3} alignItems="flex-start" direction="row" justify="center">          
             <Grid
               item
-              xs={10}
+              xs={12}
               md={12}
               className={classes.demo}              
             >       
@@ -276,6 +290,13 @@ function AdvFilter(props) {
                 <Typography variant="h5" component="h5">
                   Message til Participants
                 </Typography>
+              </Grid>
+              <Grid
+              item
+              xs={12}
+              md={12}
+              className={classes.demo}              
+            >  
 
                 <div style={{marginTop:'1rem' }}>
                   <FormLabel component="label" ><h5>Messages will be sent to all participants who signed up for activity</h5></FormLabel>
@@ -293,7 +314,13 @@ function AdvFilter(props) {
                   rows={4}    
                 />
               </div>
-
+              </Grid>
+              <Grid
+              item
+              xs={12}
+              md={12}
+              className={classes.demo}              
+            >  
               <div style={{marginTop:'1rem' }}>
                 <FormLabel component="label"  ><h5>Confirm</h5></FormLabel>   
                 <Input
@@ -309,6 +336,8 @@ function AdvFilter(props) {
                 />
               </div>
             </Grid>
+            </Grid>    
+
           </DialogContent>
           <DialogActions>
             <Button onClick={cancelClose} color="primary">
@@ -331,12 +360,12 @@ function AdvFilter(props) {
           {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
           <DialogContent
             style={{
-              height: "200px", width: "400px"
+              height: "10rem", width: "20rem"
             }}
           >                  
             <Grid
               item
-              xs={10}
+              xs={12}
               md={12}
               className={classes.demo}    
               style={{ paddingTop:"3rem" }}              
@@ -366,12 +395,12 @@ function AdvFilter(props) {
           {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
           <DialogContent
             style={{
-              height: "200px", width: "400px"
+              height: "10rem", width: "20rem"
             }}
           >                  
             <Grid
               item
-              xs={10}
+              xs={12}
               md={12}
               className={classes.demo}    
               style={{ paddingTop:"3rem" }}              

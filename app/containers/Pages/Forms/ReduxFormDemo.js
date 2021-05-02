@@ -4,13 +4,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { Field, reduxForm } from 'redux-form/immutable';
 import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
 import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -23,8 +21,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Input from '@material-ui/core/Input';
-//import axios from 'axios';
-
 import { DatePicker, TimePicker, KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MomentUtils from '@date-io/moment';
@@ -35,19 +31,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
 import { format } from 'date-fns';
-// import frLocale from 'date-fns/locale/fr';
-// import ruLocale from 'date-fns/locale/ru';
-// import enLocale from 'date-fns/locale/en-US';
-
 import {getCategories, createActivity, getActivities} from '../client.js';
-// const localeMap = {
-//   en: enLocale,
-//   fr: frLocale,
-//   ru: ruLocale,
-// };
-
-
-import useScript from '../hooks/useScript';
 
 import {
   TextFieldRedux,
@@ -142,12 +126,12 @@ function ReduxFormDemo(props) {
   const [inputdataState, setInputdataState] = useState({
     title: '',
     sport: 0,
-    date: "03/04/2020",
+    date: "2020-04-03",
     time: '18:00',
     duration: '',
     description: '',
     facilityId: '',
-    canCancel : 'true'
+    canCancel : true
   });
   const formData= {
     title: inputdataState.title,
@@ -183,6 +167,8 @@ function ReduxFormDemo(props) {
   }
 
   const handleDateChange = (date, value) => {
+    console.log(date);
+    console.log(value);
     setSelectedDate(date);
     setInputdataState({...inputdataState, date:value});
   };
@@ -314,8 +300,8 @@ function ReduxFormDemo(props) {
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                           <KeyboardDatePicker
                             label="Date picker"
-                            format="DD/MM/YYYY"
-                            placeholder="10/11/2018"
+                            format="YYYY-MM-DD"
+                            placeholder="2018-10-11"
                             // mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
                             value={selectedDate}
                             onChange={handleDateChange}
@@ -374,11 +360,6 @@ function ReduxFormDemo(props) {
               </Grid>
             </Grid> 
           
-            {/* <Grid item xs={12} md={12}>
-            <div className={classes.inlineWrap}>
-              <FormControlLabel control={<Field name="checkbox" component={CheckboxRedux} />} label="Repeat Activity" />
-            </div>
-            </Grid> */}
             <Grid item xs={12} md={12} >
               <Typography variant="button" className={classes.divider}>Description</Typography>
               <Input
@@ -414,12 +395,12 @@ function ReduxFormDemo(props) {
                   {/* <DialogTitle id="alert-dialog-title">{'Add Supplier'}</DialogTitle> */}
                   <DialogContent
                     style={{
-                      height: "200px", width: "400px"
+                      height: "10rem", width: "20rem"
                     }}
                   >                  
                     <Grid
                       item
-                      xs={10}
+                      xs={12}
                       md={12}
                       className={classes.demo}    
                       style={{ paddingTop:"3rem" }}              
@@ -454,7 +435,7 @@ function ReduxFormDemo(props) {
                   >                  
                     <Grid
                       item
-                      xs={10}
+                      xs={12}
                       md={12}
                       className={classes.demo}    
                       style={{ paddingTop:"3rem" }}              
@@ -473,8 +454,7 @@ function ReduxFormDemo(props) {
                       </Button>
                   </DialogActions>
                 </Dialog>
-              </div>  
-           
+              </div>            
 
             </Grid>
           </Paper>
